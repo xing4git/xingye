@@ -51,12 +51,13 @@ public class ZhishuController {
 
     @RequestMapping(value = {"add_zhishu"})
     public String addZhishu(@RequestParam("name") String zhishuName, RedirectAttributes attr) {
+        log.info("zhishu name: {}", zhishuName);
         if (StringUtils.isEmpty(zhishuName)) {
             attr.addAttribute("error_message", "指数名称不能为空");
             return "redirect:/zhishu/list";
         }
         zhishuService.addZhishu(zhishuName);
-        attr.addAttribute("success_message", "success!");
+        attr.addAttribute("success_message", "添加指数: " + zhishuName + "成功!");
         return "redirect:/zhishu/list";
     }
 

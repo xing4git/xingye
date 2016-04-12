@@ -144,7 +144,7 @@ public class ZhishuController {
         int errorLine = 0;
         int expireLine = 0;
         for (ZhishuData data : datas) {
-            if (lastDate != null && lastDate.compareTo(data.getDataDate()) > 0) {
+            if (lastDate != null && lastDate.compareTo(data.getDataDate()) >= 0) {
                 expireLine++;
                 continue;
             }

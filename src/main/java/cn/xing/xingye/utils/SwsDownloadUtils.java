@@ -68,7 +68,7 @@ public class SwsDownloadUtils {
             Double pb = Double.valueOf(getColumnText(columns[12]));
 
             ZhishuData data = new ZhishuData();
-            data.setId(zhishuId);
+            data.setZhishuId(zhishuId);
             data.setDataDate(date);
             data.setPb(pb);
             data.setPe(pe);

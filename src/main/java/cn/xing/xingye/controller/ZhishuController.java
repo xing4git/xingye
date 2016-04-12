@@ -6,6 +6,7 @@ import cn.xing.xingye.model.ZhishuData;
 import cn.xing.xingye.service.ZhishuService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,17 @@ public class ZhishuController {
         String viewName = "zhishu/list";
         model.put("zhishus", zhishuService.queryZhishus());
         return new ModelAndView(viewName, model);
+    }
+
+    @RequestMapping(value = {"add_zhishu"})
+    public String addZhishu(@RequestParam("name") String zhishuName, RedirectAttributes attr) {
+        if (StringUtils.isEmpty(zhishuName)) {
+            attr.addAttribute("error_message", "指数名称不能为空");
+            return "redirect:/zhishu/list";
+        }
+        zhishuService.addZhishu(zhishuName);
+        attr.addAttribute("success_message", "success!");
+        return "redirect:/zhishu/list";
     }
 
     @RequestMapping("add_data")

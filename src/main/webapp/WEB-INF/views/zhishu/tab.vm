@@ -1,0 +1,12 @@
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li #if($link.requestPath.startsWith("/zhishu/list") || $link.requestPath.equals("/zhishu")) class="active" #end>
+            <a href="/zhishu/list">指数列表</a>
+        </li>
+        <li #if($link.requestPath.startsWith("/zhishu/data")) class="active" #end>
+            <a href="/zhishu/data">指数数据</a>
+        </li>
+    </ul>
+</div>
+
+<p></p>

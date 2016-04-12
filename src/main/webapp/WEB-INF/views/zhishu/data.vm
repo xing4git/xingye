@@ -1,0 +1,70 @@
+#parse("/WEB-INF/views/zhishu/tab.vm")
+
+#set($size = $datas.size())
+#set($jiDigu = $size/10)
+#set($midDigu = $size*2/10)
+#set($weiDigu = $size*3/10)
+#set($mid = $size*7/10)
+#set($weiGaogu = $size*8/10)
+#set($midGaogu = $size*9/10)
+
+<div>
+    <h3>$zhishu.name
+        <small>共${size}条记录</small>
+    </h3>
+
+    <span>
+        极低估:0-10, 中低估:10-20, 微低估:20-30, 合适:30-70, 微高估:70-80, 中高估:80-90, 极高估:90-100
+    </span>
+</div>
+
+<div>
+    <table class="table table-bordered table-hover sortable">
+        <thead>
+        <tr class="success">
+            #foreach($th in ["日期", "市盈率", "市盈率排名", "市盈率估值",
+                "市净率", "市净率估值", "市净率排名", "收盘指数"])
+                <th>$th</th>
+            #end
+        </tr>
+        </thead>
+        <tbody>
+            #foreach($data in $datas)
+                #set($peRate = $data.peRank*10000/$size/100.0)
+                #set($pbRate = $data.pbRank*10000/$size/100.0)
+            <tr>
+                <td>$data.dataDate</td>
+                <td>$data.pe</td>
+                <td>$data.peRank</td>
+                <td>
+                    #if($data.peRank < $jiDigu) 极低估
+                    #elseif($data.peRank < $midDigu) 中低估
+                    #elseif($data.peRank < $weiDigu) 微低估
+                    #elseif($data.peRank < $mid) 合适
+                    #elseif($data.peRank < $weiGaogu) 微高估
+                    #elseif($data.peRank < $midGaogu) 中高估
+                    #else 极度高估
+                    #end
+                    $peRate%
+                </td>
+                <td>$data.pb</td>
+                <td>$data.pbRank</td>
+                <td>
+                    #if($data.pbRank < $jiDigu) 极低估
+                    #elseif($data.pbRank < $midDigu) 中低估
+                    #elseif($data.pbRank < $weiDigu) 微低估
+                    #elseif($data.pbRank < $mid) 合适
+                    #elseif($data.pbRank < $weiGaogu) 微高估
+                    #elseif($data.pbRank < $midGaogu) 中高估
+                    #else 极度高估
+                    #end
+                    $pbRate%
+                </td>
+                <td>$data.shoupan</td>
+            </tr>
+            #end
+        </tbody>
+    </table>
+</div>
+
+</div>

@@ -1,0 +1,15 @@
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li #if($link.requestPath.startsWith("/invest/prediction") || $link.requestPath.equals("/invest")) class="active" #end>
+            <a href="/invest/prediction">投资预测</a>
+        </li>
+        <li #if($link.requestPath.startsWith("/invest/dingtou")) class="active" #end>
+            <a href="/invest/dingtou">定投</a>
+        </li>
+        <li #if($link.requestPath.startsWith("/invest/record")) class="active" #end>
+            <a href="/invest/record">实盘记录</a>
+        </li>
+    </ul>
+</div>
+
+<p></p>

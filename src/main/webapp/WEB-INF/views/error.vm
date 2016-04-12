@@ -1,0 +1,6 @@
+<div>
+    <h1>很遗憾, 系统出现异常, 请联系@zhangxing</h1>
+    #if($exception)
+        $exception
+    #end
+</div>

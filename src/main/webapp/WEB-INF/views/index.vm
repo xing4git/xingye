@@ -1,0 +1,7 @@
+#set($page_title="星夜")
+
+<!-- Main component for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <h3>Hello,</h3>
+    <p>欢迎来到@zhangxing 的私人乐园: 星夜</p>
+</div>

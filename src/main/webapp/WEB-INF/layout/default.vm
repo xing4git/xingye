@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>$!page_title</title>
+    <!-- Bootstrap -->
+    <link href="/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/lib/bootstrap/css/bootstrap-sortable.css" rel="stylesheet">
+    <link href="/static/lib/bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+    <link href="/static/css/layout.css" rel="stylesheet">
+
+    <link rel="icon" href="/static/images/favicon.ico">
+</head>
+<body>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">分销后台</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li #if($link.requestPath.startsWith("/invest")) class="active" #end><a href="/invest">投资计划</a></li>
+                <li #if($link.requestPath.startsWith("/zhishu")) class="active" #end><a href="/zhishu">指数分析</a></li>
+                <li #if($link.requestPath.startsWith("/tools")) class="active" #end><a href="/tools">工具</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+##显示提示信息
+    #if($params.error_message)
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            $params.error_message
+        </div>
+    #elseif($!params.success_message)
+        <div class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+            <span class="sr-only">Success:</span>
+            $params.success_message
+        </div>
+    #end
+
+    <div class="modal fade" id="delete_modal" tabindex="-1" role="dialog"
+         aria-labelledby="delete_modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <a class="btn btn-default">确定</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    $screen_content
+</div>
+
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="/static/lib/bootstrap/js/bootstrap.js"></script>
+<script src="/static/lib/bootstrap/js/bootstrap-sortable.js"></script>
+<script src="/static/lib/bootstrap/js/moment.min.js"></script>
+<!-- react -->
+<script src="/static/lib/react/react.js"></script>
+<script src="/static/lib/react/react-dom.js"></script>
+
+<script>
+    $('#delete_modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var content = button.data('content') // 通过data-content属性指定, 显示在弹出框上的内容
+        var link = button.data('link') // 通过data-link属性指定, 点击确定时的URL链接
+        var modal = $(this)
+        modal.find('.modal-body').text(content)
+        modal.find('.modal-footer a').attr('href', link)
+    })
+</script>
+
+#foreach($user_script in $user_scripts)
+<script src="$user_script"></script>
+#end
+
+</body>
+</html>

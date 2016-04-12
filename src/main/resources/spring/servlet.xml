@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="cn.xing.xingye.controller"/>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes" value="application/json;charset=UTF-8"/>
+                <property name="features">
+                    <array>
+                        <value>WriteMapNullValue</value>
+                        <value>WriteNullStringAsEmpty</value>
+                    </array>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <mvc:view-controller path="/" view-name="index"/>
+
+    <!--拦截器配置-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- path必须是/**才能拦截所有请求-->
+            <mvc:mapping path="/**"/>
+            <bean class="cn.xing.xingye.interceptor.LogRequestInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <mvc:resources mapping="/static/**" location="/static/"/>
+
+    <bean id="velocityConfig" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="resourceLoaderPath" value="/"/>
+        <property name="configLocation" value="classpath:velocity.properties"/>
+        <property name="velocityProperties">
+            <props>
+                <prop key="input.encoding">UTF-8</prop>
+                <prop key="output.encoding">UTF-8</prop>
+                <prop key="contentType">text/html;charset=utf-8</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="suffix" value=".vm"/>
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="layoutUrl" value="/WEB-INF/layout/default.vm"/>
+        <!-- 使用springMacro的对象 -->
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <!-- 暴露requestContext对象 -->
+        <property name="requestContextAttribute" value="request"/>
+        <!-- 设置是否所有的request属性在与模板进行合并之前添加到model中 -->
+        <property name="exposeRequestAttributes" value="true"/>
+        <!-- 设置是否所有的session属性在与模板进行合并之前添加到model中 -->
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <!-- spring的日期格式化 -->
+        <property name="dateToolAttribute" value="dateTool"/>
+        <!-- velocity toolbox -->
+        <property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml"/>
+    </bean>
+
+</beans>

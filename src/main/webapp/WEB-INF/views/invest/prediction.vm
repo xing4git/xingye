@@ -1,0 +1,106 @@
+#parse("/WEB-INF/views/invest/tab.vm")
+
+#if($yearsMoney)
+<div>
+    <h3>投资预测结果</h3>
+</div>
+
+<div>
+    <table class="table table-bordered table-hover">
+        <tr class="success">
+            #foreach($th in ["年份", "投资资金(万)", "非投资资金(万)", "主动收入(万)", "被动收入(万)",
+                "被动收入占比", "资金增量(万)", "资金总额(万)", "去除通膨(万)"])
+                <th>$th</th>
+            #end
+        </tr>
+        #foreach($year in $yearsMoney.keySet())
+            #set($yearMoney = $yearsMoney[$year])
+            <tr>
+                <td>第${year}年</td>
+                <td>$yearMoney["incomeTotal"]</td>
+                <td>$yearMoney["nonIncomeTotal"]</td>
+                <td>$yearMoney["activeTotal"]</td>
+                <td>$yearMoney["nonActiveTotal"]</td>
+                <td>$yearMoney["nonActiveRate"]%</td>
+                <td>$yearMoney["inc"]</td>
+                <td>$yearMoney["total"]</td>
+                <td>$yearMoney["factTotal"]</td>
+            </tr>
+        #end
+    </table>
+</div>
+#end
+
+<div>
+    <h3>投资预测参数</h3>
+</div>
+
+<div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">初始可投资资金(万): </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="initMoney" value="$!params.initMoney">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">初始不可投资资金(万): </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="initNonMoney" value="$!params.initNonMoney">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">每年可投资收入(万): </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="incomePerYear" value="$!params.incomePerYear">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">每年不可投资收入(万): </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="incomeNonPerYear" value="$!params.incomeNonPerYear">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">投资年化收益率(%): </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="rate" value="$!params.rate">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">通货膨胀(%): </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="tongpengRate" value="$!params.tongpengRate">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">投资年限: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="years" value="$!params.years">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-default">生成投资预测</button>
+                <a class="btn btn-default"
+                   href="?initMoney=20&initNonMoney=15&incomePerYear=20&incomeNonPerYear=6&rate=15&years=20&tongpengRate=3">
+                    默认投资预测</a>
+            </div>
+        </div>
+    </form>
+</div>

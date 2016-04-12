@@ -72,6 +72,65 @@ public class ZhishuController {
         return "redirect:/zhishu/list";
     }
 
+    @RequestMapping("add_data_batch")
+    public String addDataBatch(@RequestParam("zhishuId") long zhishuId,
+                               @RequestParam("batchContent") String batchContent,
+                               RedirectAttributes attr) {
+        if (StringUtils.isEmpty(batchContent)) {
+            attr.addAttribute("error_message", "数据不能为空");
+            return "redirect:/zhishu/list";
+        }
+        batchContent = batchContent.trim();
+        String[] arrs = batchContent.split("\n");
+
+        int succLine = 0;
+        int errorLine = 0;
+        for (String line : arrs) {
+            try {
+                String[] arr = line.split("\\s+");
+                if (arr.length != 4) {
+                    log.error("error line: {}, len is: {}", line, arr.length);
+                    errorLine++;
+                    continue;
+                }
+                // 2015-12-11 4631.28	45.3500	3.8900
+                ZhishuData data = new ZhishuData();
+                data.setZhishuId(zhishuId);
+                data.setPe(Double.valueOf(arr[2]));
+                data.setPb(Double.valueOf(arr[3]));
+                data.setShoupan(Double.valueOf(arr[1]));
+                data.setDataDate(arr[0]);
+
+                long time = CommonUtils.zhishuDateToTimestamp(data.getDataDate());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(time);
+
+                long now = System.currentTimeMillis();
+                if (now - time > 10L * 365 * 24 * 3600 * 1000) {
+                    log.info("too old data: {}", data.getDataDate());
+                    errorLine++;
+                    continue;
+                }
+
+                int week = calendar.get(Calendar.DAY_OF_WEEK);
+                if (week != Calendar.MONDAY) {
+                    log.info("not monday: {}", data.getDataDate());
+                    errorLine++;
+                    continue;
+                }
+
+                zhishuService.addData(data);
+                succLine++;
+            } catch (Exception e) {
+                errorLine++;
+                log.error("error line: {}", line, e);
+            }
+        }
+
+        attr.addAttribute("success_message", "插入成功行数: " + succLine + ", 插入失败行数: " + errorLine);
+        return "redirect:/zhishu/list";
+    }
+
     @RequestMapping("data")
     public ModelAndView data(@RequestParam("zhishuId") long zhishuId,
                              @RequestParam(value = "years", required = false) Long years,

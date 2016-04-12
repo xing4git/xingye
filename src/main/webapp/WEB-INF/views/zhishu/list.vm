@@ -19,11 +19,22 @@
                 <td>$zhishu.name</td>
                 <td>$zhishu.created</td>
                 <td>
-                    <a class="btn btn-default" href="/zhishu/data?zhishuId=$zhishu.id">全部数据</a>
-                    <a class="btn btn-default" href="/zhishu/data?zhishuId=$zhishu.id&years=6">6年内数据</a>
-                    <a class="btn btn-default" href="/zhishu/data?zhishuId=$zhishu.id&from=20000101&to=20150101">2015年前数据</a>
-                    <a class="btn btn-default" data-toggle="modal" data-target="#add_data_modal"
-                       data-zhishu="$zhishu.id">添加</a>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            操作
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li><a href="/zhishu/data?zhishuId=$zhishu.id">全部数据</a></li>
+                            <li><a href="/zhishu/data?zhishuId=$zhishu.id&years=6">6年内数据</a></li>
+                            <li><a href="/zhishu/data?zhishuId=$zhishu.id&from=20000101&to=20150101">2015年前数据</a></li>
+                            <li><a data-toggle="modal" data-target="#add_data_modal"
+                               data-zhishu="$zhishu.id" data-zhishuname="$zhishu.name">添加单个</a></li>
+                            <li><a data-toggle="modal" data-target="#add_data_batch_modal"
+                               data-zhishu="$zhishu.id" data-zhishuname="$zhishu.name">批量添加</a></li>
+                        </ul>
+                    </div>
+
                 </td>
             </tr>
         #end
@@ -61,6 +72,12 @@
                 <form class="form-horizontal" action="/zhishu/add_data" method="post">
                     <input type="hidden" id="zhishuId" name="zhishuId"/>
                     <div class="form-group">
+                        <label for="zhishuName" class="col-sm-2 control-label">指数名称</label>
+                        <div class="col-sm-10">
+                            <input id="zhishuName" type="text" class="form-control"></input>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="dataDate" class="col-sm-2 control-label">日期</label>
                         <div class="col-sm-10">
                             <input type="text" name="dataDate" class="form-control" placeholder="2015-01-31"/>
@@ -82,6 +99,37 @@
                         <label for="shoupan" class="col-sm-2 control-label">收盘指数</label>
                         <div class="col-sm-10">
                             <input type="text" name="shoupan" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_data_batch_modal" tabindex="-1" role="dialog"
+     aria-labelledby="add_data_batch_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="form-horizontal" action="/zhishu/add_data_batch" method="post">
+                    <input type="hidden" id="zhishuId" name="zhishuId"/>
+                    <div class="form-group">
+                        <label for="zhishuName" class="col-sm-2 control-label">指数名称</label>
+                        <div class="col-sm-10">
+                            <input id="zhishuName" type="text" class="form-control"></input>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="batchContent" class="col-sm-2 control-label">批量数据</label>
+                        <div class="col-sm-10">
+                            <textarea name="batchContent" class="form-control" rows="10"
+                                      placeholder="每行的格式为: 发布日期	收盘指数	市盈率(倍)	市净率(倍)"></textarea>
                         </div>
                     </div>
                     <div class="form-group">

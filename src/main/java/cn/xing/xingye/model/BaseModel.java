@@ -14,7 +14,6 @@ public class BaseModel implements Serializable {
     private static final Logger log = LoggerFactory.getLogger(BaseModel.class);
     private long id;
     private Timestamp created;
-    private Timestamp updated;
     private int deleted;
 
     public long getId() {
@@ -31,14 +30,6 @@ public class BaseModel implements Serializable {
 
     public void setCreated(Timestamp created) {
         this.created = created;
-    }
-
-    public Timestamp getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Timestamp updated) {
-        this.updated = updated;
     }
 
     public int getDeleted() {

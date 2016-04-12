@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 public class ZhishuData extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(ZhishuData.class);
     private long zhishuId;
-    private Timestamp dataDate;
+    private String dataDate;
     private double pe;
     private double pb;
     private int peRank;
@@ -26,11 +26,11 @@ public class ZhishuData extends BaseModel {
         this.zhishuId = zhishuId;
     }
 
-    public Timestamp getDataDate() {
+    public String getDataDate() {
         return dataDate;
     }
 
-    public void setDataDate(Timestamp dataDate) {
+    public void setDataDate(String dataDate) {
         this.dataDate = dataDate;
     }
 

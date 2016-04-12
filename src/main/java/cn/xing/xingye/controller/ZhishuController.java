@@ -1,12 +1,11 @@
 package cn.xing.xingye.controller;
 
+import cn.xing.xingye.CommonUtils;
 import cn.xing.xingye.editor.TimestampEditor;
 import cn.xing.xingye.model.ZhishuData;
 import cn.xing.xingye.service.ZhishuService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,10 +35,10 @@ public class ZhishuController {
     @Autowired
     private ZhishuService zhishuService;
 
-    @InitBinder
+    /*@InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(Timestamp.class, new TimestampEditor(new SimpleDateFormat("yyyyMMdd")));
-    }
+    }*/
 
     @RequestMapping(value = {"", "list"})
     public ModelAndView zhishu() {
@@ -52,6 +50,10 @@ public class ZhishuController {
 
     @RequestMapping("add_data")
     public String addData(ZhishuData data, RedirectAttributes attr) {
+        if (!CommonUtils.isValidZhishuDate(data.getDataDate())) {
+            attr.addAttribute("error_message", "invalid date: " + data.getDataDate());
+            return "redirect:/zhishu/list";
+        }
         zhishuService.addData(data);
         attr.addAttribute("success_message", "success!");
         return "redirect:/zhishu/list";
@@ -69,7 +71,7 @@ public class ZhishuController {
         if (years != null) {
             long now = System.currentTimeMillis();
             for (Iterator<ZhishuData> it = datas.iterator(); it.hasNext(); ) {
-                long time = it.next().getDataDate().getTime();
+                long time = CommonUtils.zhishuDateToTimestamp(it.next().getDataDate());
                 if (now - time > years * 365 * 24 * 3600 * 1000L) it.remove();
             }
         }
@@ -79,7 +81,7 @@ public class ZhishuController {
                 long fromTime = format.parse(from).getTime();
                 long toTime = format.parse(to).getTime();
                 for (Iterator<ZhishuData> it = datas.iterator(); it.hasNext(); ) {
-                    long time = it.next().getDataDate().getTime();
+                    long time = CommonUtils.zhishuDateToTimestamp(it.next().getDataDate());
                     if (time < fromTime || time > toTime) it.remove();
                 }
             } catch (ParseException e) {

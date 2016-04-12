@@ -1,5 +1,6 @@
 package cn.xing.xingye.service;
 
+import cn.xing.xingye.CommonUtils;
 import cn.xing.xingye.model.ZhishuData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -15,8 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -63,7 +62,7 @@ public class ZhishuServiceTest {
         long now = System.currentTimeMillis();
         for (ZhishuData data : datas) {
             boolean ok = true;
-            long time = data.getDataDate().getTime();
+            long time = CommonUtils.zhishuDateToTimestamp(data.getDataDate());
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(time);
             int week = calendar.get(Calendar.DAY_OF_WEEK);
@@ -79,7 +78,6 @@ public class ZhishuServiceTest {
         long zhishuId = 3;
         String filename = filenameMap.get(zhishuId) + ".data";
         BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dir + filename)));
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -104,9 +102,9 @@ public class ZhishuServiceTest {
                 data.setPe(Double.valueOf(arr[2]));
                 data.setPb(Double.valueOf(arr[3]));
                 data.setShoupan(Double.valueOf(arr[1]));
-                data.setDataDate(new Timestamp(format.parse(arr[0]).getTime()));
+                data.setDataDate(arr[0]);
 
-                long time = data.getDataDate().getTime();
+                long time = CommonUtils.zhishuDateToTimestamp(data.getDataDate());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(time);
 

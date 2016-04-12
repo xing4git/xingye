@@ -36,6 +36,7 @@ public class ZhishuService extends BaseService {
     }
 
     public void addData(ZhishuData data) {
+
         jdbcTemplate.update("INSERT INTO zhishu_data(zhishuId, pe, pb, shoupan, dataDate) VALUES(?,?,?,?,?)",
                 data.getZhishuId(), data.getPe(), data.getPb(), data.getShoupan(), data.getDataDate());
     }

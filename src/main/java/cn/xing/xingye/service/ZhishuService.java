@@ -3,6 +3,7 @@ package cn.xing.xingye.service;
 import cn.xing.xingye.model.Zhishu;
 import cn.xing.xingye.model.ZhishuData;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -22,8 +23,8 @@ import java.util.Map;
 public class ZhishuService extends BaseService {
     private static final Logger log = LoggerFactory.getLogger(ZhishuService.class);
 
-    public void addZhishu(String name) {
-        jdbcTemplate.update("INSERT INTO zhishu(name) VALUES (?)", name);
+    public void addZhishu(String name, String swsCode) {
+        jdbcTemplate.update("INSERT INTO zhishu(name,swsCode) VALUES (?,?)", name, swsCode);
     }
 
     public List<Zhishu> queryZhishus() {
@@ -36,7 +37,6 @@ public class ZhishuService extends BaseService {
     }
 
     public void addData(ZhishuData data) {
-
         jdbcTemplate.update("INSERT INTO zhishu_data(zhishuId, pe, pb, shoupan, dataDate) VALUES(?,?,?,?,?)",
                 data.getZhishuId(), data.getPe(), data.getPb(), data.getShoupan(), data.getDataDate());
     }
@@ -50,7 +50,18 @@ public class ZhishuService extends BaseService {
     public List<ZhishuData> queryDatas(long zhishuId) {
         List<ZhishuData> datas = toJavaList(query("select * from zhishu_data where deleted=0 and zhishuId=? " +
                 "order by dataDate desc", zhishuId), ZhishuData.class);
-
         return datas;
     }
+
+    /**
+     * 返回最新一条数据的日期
+     */
+    public String queryLastData(long zhishuId) {
+        JSONObject json = queryOne("select dataDate from zhishu_data where deleted=0 and zhishuId=?" +
+                " order by dataDate desc limit 1", zhishuId);
+        if (json == null || json.isEmpty()) return null;
+        return json.getString("dataDate");
+    }
+
+
 }

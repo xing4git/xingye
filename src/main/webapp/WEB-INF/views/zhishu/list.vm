@@ -32,6 +32,9 @@
                             <li><a href="/zhishu/data?zhishuId=$zhishu.id">全部数据</a></li>
                             <li><a href="/zhishu/data?zhishuId=$zhishu.id&years=6">6年内数据</a></li>
                             <li><a href="/zhishu/data?zhishuId=$zhishu.id&from=20000101&to=20150101">2015年前数据</a></li>
+                            #if($zhishu.swsCode)
+                            <li><a href="/zhishu/sync_data_from_sws?zhishuId=$zhishu.id">同步申万数据</a></li>
+                            #end
                             <li><a data-toggle="modal" data-target="#add_data_modal"
                                data-zhishu="$zhishu.id" data-zhishuname="$zhishu.name">添加单个</a></li>
                             <li><a data-toggle="modal" data-target="#add_data_batch_modal"
@@ -55,6 +58,10 @@
                         <label for="name" class="col-sm-2 control-label">指数名称</label>
                         <div class="col-sm-10">
                             <input type="text" name="name" class="form-control"/>
+                        </div>
+                        <label for="swsCode" class="col-sm-2 control-label">申万code</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="swsCode" class="form-control"/>
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">

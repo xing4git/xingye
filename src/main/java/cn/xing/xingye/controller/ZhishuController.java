@@ -1,8 +1,10 @@
 package cn.xing.xingye.controller;
 
+import cn.xing.xingye.model.Zhishu;
 import cn.xing.xingye.utils.CommonUtils;
 import cn.xing.xingye.model.ZhishuData;
 import cn.xing.xingye.service.ZhishuService;
+import cn.xing.xingye.utils.SwsDownloadUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
@@ -46,13 +48,16 @@ public class ZhishuController {
     }
 
     @RequestMapping(value = {"add_zhishu"})
-    public String addZhishu(@RequestParam("name") String zhishuName, RedirectAttributes attr) {
+    public String addZhishu(@RequestParam("name") String zhishuName,
+                            @RequestParam(value = "swsCode", required = false) String swsCode,
+                            RedirectAttributes attr) {
         log.info("zhishu name: {}", zhishuName);
         if (StringUtils.isEmpty(zhishuName)) {
             attr.addAttribute("error_message", "指数名称不能为空");
             return "redirect:/zhishu/list";
         }
-        zhishuService.addZhishu(zhishuName);
+        if (swsCode == null) swsCode = "";
+        zhishuService.addZhishu(zhishuName, swsCode);
         attr.addAttribute("success_message", "添加指数: " + zhishuName + "成功!");
         return "redirect:/zhishu/list";
     }
@@ -97,23 +102,11 @@ public class ZhishuController {
                 data.setShoupan(Double.valueOf(arr[1]));
                 data.setDataDate(arr[0]);
 
-                long time = CommonUtils.zhishuDateToTimestamp(data.getDataDate());
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(time);
-
-                long now = System.currentTimeMillis();
-                if (now - time > 10L * 365 * 24 * 3600 * 1000) {
-                    log.info("too old data: {}", data.getDataDate());
+                if (!isValidData(data)) {
                     errorLine++;
                     continue;
                 }
 
-                int week = calendar.get(Calendar.DAY_OF_WEEK);
-                if (week != Calendar.MONDAY) {
-                    log.info("not monday: {}", data.getDataDate());
-                    errorLine++;
-                    continue;
-                }
 
                 zhishuService.addData(data);
                 succLine++;
@@ -125,6 +118,68 @@ public class ZhishuController {
 
         attr.addAttribute("success_message", "插入成功行数: " + succLine + ", 插入失败行数: " + errorLine);
         return "redirect:/zhishu/list";
+    }
+
+    @RequestMapping("sync_data_from_sws")
+    public String syncDataFromSws(@RequestParam("zhishuId") long zhishuId,
+                                  RedirectAttributes attr) {
+        Zhishu zhishu = zhishuService.queryZhishu(zhishuId);
+        if (zhishu == null) {
+            attr.addAttribute("error_message", "该指数不存在");
+            return "redirect:/zhishu/list";
+        }
+
+        String swsCode = zhishu.getSwsCode();
+        if (StringUtils.isEmpty(swsCode)) {
+            attr.addAttribute("error_message", "该指数不存在对应的申万code");
+            return "redirect:/zhishu/list";
+        }
+        String lastDate = zhishuService.queryLastData(zhishuId);
+        log.info("zhishu {} last date is {}", zhishu.getName(), lastDate);
+
+        List<ZhishuData> datas = SwsDownloadUtils.parse(swsCode, zhishuId);
+        log.info("sync from sws size: {}", datas.size());
+
+        int succLine = 0;
+        int errorLine = 0;
+        int expireLine = 0;
+        for (ZhishuData data : datas) {
+            if (lastDate != null && lastDate.compareTo(data.getDataDate()) > 0) {
+                expireLine++;
+                continue;
+            }
+            if (!isValidData(data)) {
+                errorLine++;
+                continue;
+            }
+            zhishuService.addData(data);
+            succLine++;
+        }
+
+
+        attr.addAttribute("success_message", "插入成功行数: " + succLine + ", 插入失败行数: "
+                + errorLine + ", 过期行数: " + expireLine);
+        return "redirect:/zhishu/list";
+    }
+
+    private boolean isValidData(ZhishuData data) {
+        long time = CommonUtils.zhishuDateToTimestamp(data.getDataDate());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        long now = System.currentTimeMillis();
+        if (now - time > 10L * 365 * 24 * 3600 * 1000) {
+            log.info("too old data: {}", data.getDataDate());
+            return false;
+        }
+
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        if (week != Calendar.MONDAY) {
+            log.info("not monday: {}", data.getDataDate());
+            return false;
+        }
+
+        return true;
     }
 
     @RequestMapping("data")

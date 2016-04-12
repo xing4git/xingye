@@ -41,10 +41,6 @@ public class ZhishuServiceTest {
         filenameMap.put(7L, "50");
     }
 
-    @Test
-    public void testAdd() {
-        zhishuService.addZhishu("申万中盘指数");
-    }
 
     @Test
     public void testQuery() {

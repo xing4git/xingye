@@ -11,7 +11,7 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        byte[] bytes = HttpClientUtils.post("https://www.jisilu.cn/data/sfnew/funda_list/", "");
-        log.info(new String(bytes, "utf8"));
+        String s = HttpClientUtils.get("http://www.swsindex.com/downloadfiles.aspx?swindexcode=801812&type=510&columnid=8890","utf8");
+        log.info(s);
     }
 }

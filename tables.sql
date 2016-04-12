@@ -6,6 +6,7 @@ GRANT ALL PRIVILEGES ON *.* TO xing@localhost IDENTIFIED BY 'zhangxing@123$%^' W
 CREATE TABLE `zhishu` (
 `id` bigint(20) NOT NULL AUTO_INCREMENT,
 `name` varchar(64) NOT NULL DEFAULT '' COMMENT '指数名称',
+`swsCode` VARCHAR(32) DEFAULT '' COMMENT '申万code',
 `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:未删除, 1:已删除',
 PRIMARY KEY (`id`)
@@ -23,3 +24,5 @@ CREATE TABLE `zhishu_data` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_zhishu_date`(`zhishuId`, `dataDate`)
 ) ENGINE=InnoDB COMMENT='指数数据表';
+
+ALTER TABLE zhishu ADD COLUMN `swsCode` VARCHAR(32) DEFAULT '' COMMENT '申万code';

@@ -10,6 +10,15 @@ public class Zhishu extends BaseModel {
     private static final Logger log = LoggerFactory.getLogger(Zhishu.class);
 
     private String name;
+    private String swsCode;
+
+    public String getSwsCode() {
+        return swsCode;
+    }
+
+    public void setSwsCode(String swsCode) {
+        this.swsCode = swsCode;
+    }
 
     public String getName() {
         return name;

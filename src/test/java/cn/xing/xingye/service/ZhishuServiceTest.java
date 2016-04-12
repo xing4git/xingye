@@ -1,6 +1,6 @@
 package cn.xing.xingye.service;
 
-import cn.xing.xingye.CommonUtils;
+import cn.xing.xingye.utils.CommonUtils;
 import cn.xing.xingye.model.ZhishuData;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

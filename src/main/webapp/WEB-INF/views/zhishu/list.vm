@@ -1,10 +1,14 @@
 #set($user_scripts = ["/static/js/zhishu/list.js"])
 #parse("/WEB-INF/views/zhishu/tab.vm")
 
+<div class="row">
 <div>
-    <a class="btn btn-default" data-toggle="modal" data-target="#add_zhishu_modal"
+    <a class="btn btn-primary" data-toggle="modal" data-target="#add_zhishu_modal"
        data-zhishu="$zhishu.id">添加指数</a>
 </div>
+</div>
+
+<br>
 
 <div>
     <table class="table table-bordered table-hover">

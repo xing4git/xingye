@@ -1,4 +1,4 @@
-package cn.xing.xingye;
+package cn.xing.xingye.utils;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

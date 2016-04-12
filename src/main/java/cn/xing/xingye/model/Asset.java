@@ -1,6 +1,6 @@
 package cn.xing.xingye.model;
 
-import cn.xing.xingye.XingConst;
+import cn.xing.xingye.utils.XingConst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

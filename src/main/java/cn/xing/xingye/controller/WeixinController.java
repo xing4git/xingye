@@ -37,10 +37,10 @@ public class WeixinController {
         String s = StringUtils.collectionToDelimitedString(strs,"");
         s = DigestUtils.sha1(s);
 
-        LOG.info("signature from weixin: {}, generate sign: {}", signature, s);
         if (s.equals(signature)) {
             return echostr;
         }
-        return echostr;
+        LOG.info("signature from weixin: {}, generate sign: {}", signature, s);
+        return "";
     }
 }

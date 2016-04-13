@@ -33,6 +33,19 @@
                 <li #if($link.requestPath.startsWith("/zhishu")) class="active" #end><a href="/zhishu">指数分析</a></li>
                 <li #if($link.requestPath.startsWith("/tools")) class="active" #end><a href="/tools">工具</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    #if($loginUser)
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">$loginUser.username <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/auth/logout">退出</a></li>
+                    </ul>
+                    #else
+                        <a href="/auth/login">登录</a>
+                    #end
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

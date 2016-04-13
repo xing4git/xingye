@@ -26,3 +26,15 @@ CREATE TABLE `zhishu_data` (
 ) ENGINE=InnoDB COMMENT='指数数据表';
 
 ALTER TABLE zhishu ADD COLUMN `swsCode` VARCHAR(32) DEFAULT '' COMMENT '申万code';
+
+CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(16) NOT NULL DEFAULT '' COMMENT '用户名,唯一',
+  `email` VARCHAR(64) NOT NULL DEFAULT '' COMMENT 'email,唯一',
+  `password` VARCHAR(128) NOT NULL DEFAULT '' COMMENT '密码,md5->base64',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:未删除, 1:已删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_username`(`username`),
+  UNIQUE KEY `idx_email`(`email`)
+) ENGINE=InnoDB COMMENT='指数数据表';

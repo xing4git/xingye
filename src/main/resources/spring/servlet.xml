@@ -34,7 +34,15 @@
         <mvc:interceptor>
             <!-- path必须是/**才能拦截所有请求-->
             <mvc:mapping path="/**"/>
-            <bean class="cn.xing.xingye.interceptor.LogRequestInterceptor"/>
+            <bean class="cn.xing.xingye.interceptor.AllRequestInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- path必须是/**才能拦截所有请求-->
+            <mvc:mapping path="/zhishu/add_zhishu"/>
+            <mvc:mapping path="/zhishu/add_data"/>
+            <mvc:mapping path="/zhishu/add_data_batch"/>
+            <mvc:mapping path="/zhishu/sync_data_from_sws"/>
+            <bean class="cn.xing.xingye.interceptor.AuthInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

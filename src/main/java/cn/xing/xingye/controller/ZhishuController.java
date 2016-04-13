@@ -5,6 +5,7 @@ import cn.xing.xingye.utils.CommonUtils;
 import cn.xing.xingye.model.ZhishuData;
 import cn.xing.xingye.service.ZhishuService;
 import cn.xing.xingye.utils.SwsDownloadUtils;
+import cn.xing.xingye.utils.XingConst;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
@@ -53,23 +54,23 @@ public class ZhishuController {
                             RedirectAttributes attr) {
         log.info("zhishu name: {}", zhishuName);
         if (StringUtils.isEmpty(zhishuName)) {
-            attr.addAttribute("error_message", "指数名称不能为空");
+            attr.addAttribute(XingConst.KEY_ERROR_MSG, "指数名称不能为空");
             return "redirect:/zhishu/list";
         }
         if (swsCode == null) swsCode = "";
         zhishuService.addZhishu(zhishuName, swsCode);
-        attr.addAttribute("success_message", "添加指数: " + zhishuName + "成功!");
+        attr.addAttribute(XingConst.KEY_SUCCESS_MSG, "添加指数: " + zhishuName + "成功!");
         return "redirect:/zhishu/list";
     }
 
     @RequestMapping("add_data")
     public String addData(ZhishuData data, RedirectAttributes attr) {
         if (!CommonUtils.isValidZhishuDate(data.getDataDate())) {
-            attr.addAttribute("error_message", "invalid date: " + data.getDataDate());
+            attr.addAttribute(XingConst.KEY_ERROR_MSG, "invalid date: " + data.getDataDate());
             return "redirect:/zhishu/list";
         }
         zhishuService.addData(data);
-        attr.addAttribute("success_message", "success!");
+        attr.addAttribute(XingConst.KEY_SUCCESS_MSG, "success!");
         return "redirect:/zhishu/list";
     }
 
@@ -78,7 +79,7 @@ public class ZhishuController {
                                @RequestParam("batchContent") String batchContent,
                                RedirectAttributes attr) {
         if (StringUtils.isEmpty(batchContent)) {
-            attr.addAttribute("error_message", "数据不能为空");
+            attr.addAttribute(XingConst.KEY_ERROR_MSG, "数据不能为空");
             return "redirect:/zhishu/list";
         }
         batchContent = batchContent.trim();
@@ -116,7 +117,7 @@ public class ZhishuController {
             }
         }
 
-        attr.addAttribute("success_message", "插入成功行数: " + succLine + ", 插入失败行数: " + errorLine);
+        attr.addAttribute(XingConst.KEY_SUCCESS_MSG, "插入成功行数: " + succLine + ", 插入失败行数: " + errorLine);
         return "redirect:/zhishu/list";
     }
 
@@ -125,13 +126,13 @@ public class ZhishuController {
                                   RedirectAttributes attr) {
         Zhishu zhishu = zhishuService.queryZhishu(zhishuId);
         if (zhishu == null) {
-            attr.addAttribute("error_message", "该指数不存在");
+            attr.addAttribute(XingConst.KEY_ERROR_MSG, "该指数不存在");
             return "redirect:/zhishu/list";
         }
 
         String swsCode = zhishu.getSwsCode();
         if (StringUtils.isEmpty(swsCode)) {
-            attr.addAttribute("error_message", "该指数不存在对应的申万code");
+            attr.addAttribute(XingConst.KEY_ERROR_MSG, "该指数不存在对应的申万code");
             return "redirect:/zhishu/list";
         }
         String lastDate = zhishuService.queryLastData(zhishuId);
@@ -157,7 +158,7 @@ public class ZhishuController {
         }
 
 
-        attr.addAttribute("success_message", "插入成功行数: " + succLine + ", 插入失败行数: "
+        attr.addAttribute(XingConst.KEY_SUCCESS_MSG, "插入成功行数: " + succLine + ", 插入失败行数: "
                 + errorLine + ", 过期行数: " + expireLine);
         return "redirect:/zhishu/list";
     }

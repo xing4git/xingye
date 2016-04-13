@@ -36,4 +36,8 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="configFactory" class="cn.xing.xingye.factory.ConfigFactory"/>
+    <bean id="weixinConfig" class="cn.xing.xingye.model.WeixinConfig"
+          factory-bean="configFactory" factory-method="newWeixinConfig"/>
+
 </beans>

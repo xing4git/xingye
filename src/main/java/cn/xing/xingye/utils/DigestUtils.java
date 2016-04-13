@@ -31,6 +31,23 @@ public class DigestUtils {
         return sb.toString();
     }
 
+    public static String sha1(String source) {
+        if (source == null) return null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] bytes = md.digest(source.getBytes("utf8"));
+            for (byte b : bytes) {
+                int high4 = b >>> 4 & 0xf;
+                int low4 = b & 0xf;
+                sb.append(md5s[high4]).append(md5s[low4]);
+            }
+        } catch (Exception e) {
+            LOG.error("digest error", e);
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
         System.out.println(Base64.encodeBase64String(DigestUtils.md5("shuai1989912").getBytes()));
     }

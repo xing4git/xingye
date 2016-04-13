@@ -20,7 +20,7 @@ import java.util.List;
  * Created by zhangxing on 15/12/23.
  */
 public class BaseService {
-    private static final Logger log = LoggerFactory.getLogger(BaseService.class);
+    static final Logger log = LoggerFactory.getLogger(BaseService.class);
 
     @Autowired
     protected JdbcTemplate jdbcTemplate;

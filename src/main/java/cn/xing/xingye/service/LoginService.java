@@ -3,9 +3,8 @@ package cn.xing.xingye.service;
 import cn.xing.xingye.exception.LoginException;
 import cn.xing.xingye.model.LoginInfo;
 import cn.xing.xingye.model.User;
-import cn.xing.xingye.utils.DigestUtils;
 import com.google.common.collect.Maps;
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -100,7 +99,7 @@ public class LoginService extends BaseService {
     }
 
     private String encodePassword(String password) {
-        return Base64.encodeBase64String(DigestUtils.md5(password).getBytes());
+        return DigestUtils.md5Hex(password);
     }
 
     public User queryUserById(Long userId) {
@@ -119,7 +118,7 @@ public class LoginService extends BaseService {
         StringBuilder sb = new StringBuilder();
         sb.append(u.getEmail()).append("_").append(System.currentTimeMillis())
                 .append("_").append(random.nextLong());
-        String md5Encode = DigestUtils.md5(sb.toString());
+        String md5Encode = DigestUtils.md5Hex(sb.toString());
         String token = md5Encode + "_" + u.getId();
         return token;
     }

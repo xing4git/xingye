@@ -1,8 +1,8 @@
 package cn.xing.xingye.controller;
 
 import cn.xing.xingye.model.WeixinConfig;
-import cn.xing.xingye.utils.DigestUtils;
 import com.google.common.collect.Lists;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class WeixinController {
         List<String> strs = Lists.newArrayList(config.token, timestamp, nonce);
         Collections.sort(strs);
         String s = StringUtils.collectionToDelimitedString(strs,"");
-        s = DigestUtils.sha1(s);
+        s = DigestUtils.shaHex(s);
 
         if (s.equals(signature)) {
             return echostr;

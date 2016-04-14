@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,13 +28,11 @@ public class WeixinController {
     @Autowired
     private WeixinConfig config;
 
-    @ResponseBody
     @RequestMapping("")
-    public String index(@RequestParam("signature") String signature,
+    public void index(@RequestParam("signature") String signature,
                         @RequestParam("timestamp") String timestamp,
                         @RequestParam("nonce") String nonce,
-                        @RequestParam("echostr") String echostr
-    ) {
+                        @RequestParam("echostr") String echostr, HttpServletResponse response) throws IOException {
         List<String> strs = Lists.newArrayList(config.token, timestamp, nonce);
         Collections.sort(strs);
         String s = StringUtils.collectionToDelimitedString(strs,"");
@@ -39,9 +40,12 @@ public class WeixinController {
 
         if (s.equals(signature)) {
             LOG.info("check weixin signature succ! echo: {}", echostr);
-            return echostr;
+            PrintWriter writer = response.getWriter();
+            writer.write(echostr);
+            writer.flush();
+            return;
         }
         LOG.info("signature from weixin: {}, generate sign: {}", signature, s);
-        return "";
+        return;
     }
 }

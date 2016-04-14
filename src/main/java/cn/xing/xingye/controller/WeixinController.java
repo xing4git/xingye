@@ -38,6 +38,7 @@ public class WeixinController {
         s = DigestUtils.shaHex(s);
 
         if (s.equals(signature)) {
+            LOG.info("check weixin signature succ! echo: {}", echostr);
             return echostr;
         }
         LOG.info("signature from weixin: {}, generate sign: {}", signature, s);

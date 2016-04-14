@@ -6,6 +6,7 @@ import cn.xing.xingye.model.WeixinMenu;
 import cn.xing.xingye.model.WeixinViewButton;
 import cn.xing.xingye.service.WeixinService;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +34,24 @@ public class WeixinController {
     public void index(@RequestParam("signature") String signature,
                       @RequestParam("timestamp") String timestamp,
                       @RequestParam("nonce") String nonce,
-                      @RequestParam("echostr") String echostr,
+                      @RequestParam(value = "echostr", required = false) String echostr,
                       HttpServletRequest request,
                       HttpServletResponse response)
             throws IOException {
         LOG.info("http method: {}, content: {}", request.getMethod(), request.getParameterMap());
-        if (weixinService.checkSignature(signature, timestamp, nonce)) {
-            LOG.info("check weixin signature succ! echo: {}", echostr);
+        if (!weixinService.checkSignature(signature, timestamp, nonce)) {
+            LOG.error("check weixin signature failed!");
+            return;
+        }
+
+        LOG.info("check weixin signature succ! echo: {}", echostr);
+        if (!StringUtils.isEmpty(echostr)) {
             PrintWriter writer = response.getWriter();
             writer.write(echostr);
             writer.flush();
             return;
         }
-        LOG.error("check weixin signature failed!");
-        return;
+
     }
 
     @ResponseBody

@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,28 +28,40 @@ public class WeixinController {
     @Autowired
     private WeixinService weixinService;
 
-    @RequestMapping("")
-    public void index(@RequestParam("signature") String signature,
-                      @RequestParam("timestamp") String timestamp,
-                      @RequestParam("nonce") String nonce,
-                      @RequestParam(value = "echostr", required = false) String echostr,
-                      HttpServletRequest request,
-                      HttpServletResponse response)
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public void checkSign(@RequestParam("signature") String signature,
+                          @RequestParam("timestamp") String timestamp,
+                          @RequestParam("nonce") String nonce,
+                          @RequestParam("echostr") String echostr,
+                          HttpServletResponse response)
             throws IOException {
-        LOG.info("http method: {}, content: {}", request.getMethod(), request.getParameterMap());
         if (!weixinService.checkSignature(signature, timestamp, nonce)) {
             LOG.error("check weixin signature failed!");
             return;
         }
 
         LOG.info("check weixin signature succ! echo: {}", echostr);
-        if (!StringUtils.isEmpty(echostr)) {
-            PrintWriter writer = response.getWriter();
-            writer.write(echostr);
-            writer.flush();
-            return;
+        PrintWriter writer = response.getWriter();
+        writer.write(echostr);
+        writer.flush();
+        return;
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
+    public String receiveMsg(@RequestParam("signature") String signature,
+                             @RequestParam("timestamp") String timestamp,
+                             @RequestParam("nonce") String nonce,
+                             @RequestBody String content)
+            throws IOException {
+        if (!weixinService.checkSignature(signature, timestamp, nonce)) {
+            LOG.error("check weixin signature failed!");
+            return "";
         }
 
+        LOG.info("receive msg: {}", content);
+
+        return content;
     }
 
     @ResponseBody

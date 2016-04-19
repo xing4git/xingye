@@ -25,6 +25,8 @@ public class AllRequestInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
+        response.setCharacterEncoding("utf8");
+
         String query = request.getQueryString();
         String url = request.getRequestURI() + (StringUtils.isEmpty(query) ? ""
                 : "?" + query);

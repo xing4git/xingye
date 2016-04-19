@@ -78,14 +78,14 @@ public class WeixinService extends BaseService {
         } else if (receiveMessage instanceof WeixinVoiceMessage) {
             String recognition = ((WeixinVoiceMessage) receiveMessage).getRecognition();
             if (StringUtils.isEmpty(recognition)) {
-                content = "";
+                content = "没有听懂说什么呢? 不会是你的呻吟吧...";
             } else {
                 content = handleTextMessage(content);
             }
         } else if (receiveMessage instanceof WeixinImageMessage) {
             content = "这是...1024的图吗?";
         } else if (receiveMessage instanceof WeixinLocationMessage) {
-            content = ((WeixinLocationMessage) receiveMessage).getLabel() + "这是我们的约会地址吗?";
+            content = ((WeixinLocationMessage) receiveMessage).getLabel() + ": 这是我们的约会地址吗?";
         } else if (receiveMessage instanceof WeixinVideoMessage) {
             content = "视频什么的, 我最喜欢了";
         } else if (receiveMessage instanceof WeixinLinkMessage) {

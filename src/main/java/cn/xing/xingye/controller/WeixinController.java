@@ -1,10 +1,9 @@
 package cn.xing.xingye.controller;
 
 import cn.xing.xingye.exception.WeixinException;
-import cn.xing.xingye.model.WeixinButtonGroup;
-import cn.xing.xingye.model.WeixinMenu;
-import cn.xing.xingye.model.WeixinViewButton;
+import cn.xing.xingye.model.*;
 import cn.xing.xingye.service.WeixinService;
+import cn.xing.xingye.utils.WeixinMessageHelper;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -53,15 +52,16 @@ public class WeixinController {
                              @RequestParam("timestamp") String timestamp,
                              @RequestParam("nonce") String nonce,
                              @RequestBody String content)
-            throws IOException {
+            throws Exception {
         if (!weixinService.checkSignature(signature, timestamp, nonce)) {
             LOG.error("check weixin signature failed!");
             return "";
         }
 
-        LOG.info("receive msg: {}", content);
-
-        return content;
+        WeixinMessage message = WeixinMessageHelper.readFromXML(content);
+        WeixinMessage response = weixinService.response(message);
+        String xml = WeixinMessageHelper.message2XML(response);
+        return xml;
     }
 
     @ResponseBody

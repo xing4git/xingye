@@ -1,9 +1,7 @@
 package cn.xing.xingye.service;
 
 import cn.xing.xingye.exception.WeixinException;
-import cn.xing.xingye.model.WeixinAccessToken;
-import cn.xing.xingye.model.WeixinMenu;
-import cn.xing.xingye.model.WeixinConfig;
+import cn.xing.xingye.model.*;
 import cn.xing.xingye.utils.HttpClientUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -66,6 +64,42 @@ public class WeixinService extends BaseService {
             if (e instanceof WeixinException) throw (WeixinException) e;
             throw new WeixinException("request access token error", e);
         }
+    }
+
+    public WeixinMessage response(WeixinMessage receiveMessage) {
+        WeixinTextMessage response = new WeixinTextMessage();
+        response.setFromUserName(receiveMessage.getToUserName());
+        response.setToUserName(receiveMessage.getFromUserName());
+        response.setCreateTime((int) (System.currentTimeMillis() / 1000));
+
+        String content = null;
+        if (receiveMessage instanceof WeixinTextMessage) {
+            content = handleTextMessage(((WeixinTextMessage) receiveMessage).getContent());
+        } else if (receiveMessage instanceof WeixinVoiceMessage) {
+            String recognition = ((WeixinVoiceMessage) receiveMessage).getRecognition();
+            if (StringUtils.isEmpty(recognition)) {
+                content = "";
+            } else {
+                content = handleTextMessage(content);
+            }
+        } else if (receiveMessage instanceof WeixinImageMessage) {
+            content = "这是...1024的图吗?";
+        } else if (receiveMessage instanceof WeixinLocationMessage) {
+            content = ((WeixinLocationMessage) receiveMessage).getLabel() + "这是我们的约会地址吗?";
+        } else if (receiveMessage instanceof WeixinVideoMessage) {
+            content = "视频什么的, 我最喜欢了";
+        } else if (receiveMessage instanceof WeixinLinkMessage) {
+            content = "文章已珍藏, 如果是1024的文章, 我会给你满分.";
+        } else {
+            content = "哎呀, 虽然不知道你给我发了什么, 但看起来很厉害的样子";
+        }
+        response.setContent(content);
+
+        return response;
+    }
+
+    private String handleTextMessage(String content) {
+        return "hello world: " + content;
     }
 
     public void createMenu(WeixinMenu menu) throws WeixinException {

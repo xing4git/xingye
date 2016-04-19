@@ -47,7 +47,7 @@
                 <bean class="cn.xing.xingye.weixin.message.hanler.LinkMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.LocationMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.SubscribeMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.UnsubscribeMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.RemoveSubscribeMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.VideoMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.VoiceMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.ZhishuMessageHandler"/>

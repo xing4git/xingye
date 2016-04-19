@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by indexing on 16/4/19.
  */
-public class UnsubscribeMessageHandler implements MessageHanlder {
+public class RemoveSubscribeMessageHandler implements MessageHanlder {
     @Autowired
     private WeixinUserService weixinUserService;
 

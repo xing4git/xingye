@@ -40,4 +40,19 @@
     <bean id="weixinConfig" class="cn.xing.xingye.model.WeixinConfig"
           factory-bean="configFactory" factory-method="newWeixinConfig"/>
 
+    <bean id="messageHandlerRegistry" class="cn.xing.xingye.weixin.message.hanler.MessageHandlerRegistry">
+        <property name="messageHanlders">
+            <list>
+                <bean class="cn.xing.xingye.weixin.message.hanler.ImageMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.LinkMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.LocationMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.SubscribeMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.UnsubscribeMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.VideoMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.VoiceMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.ZhishuMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.LastMessageHandler"/>
+            </list>
+        </property>
+    </bean>
 </beans>

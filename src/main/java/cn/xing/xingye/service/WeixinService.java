@@ -3,6 +3,7 @@ package cn.xing.xingye.service;
 import cn.xing.xingye.exception.WeixinException;
 import cn.xing.xingye.model.*;
 import cn.xing.xingye.utils.HttpClientUtils;
+import cn.xing.xingye.weixin.message.hanler.MessageHandlerRegistry;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -30,6 +31,10 @@ public class WeixinService extends BaseService {
 
     @Autowired
     private WeixinConfig config;
+    @Autowired
+    private MessageHandlerRegistry messageHandlerRegistry;
+    @Autowired
+    private WeixinUserService weixinUserService;
     private WeixinAccessToken accessToken;
 
     private String serverURL = "https://api.weixin.qq.com/cgi-bin";
@@ -77,72 +82,16 @@ public class WeixinService extends BaseService {
         response.setToUserName(receiveMessage.getFromUserName());
         response.setCreateTime((int) (System.currentTimeMillis() / 1000));
 
-        String content = null;
-        if (receiveMessage instanceof WeixinTextMessage) {
-            content = handleTextMessage(((WeixinTextMessage) receiveMessage).getContent());
-        } else if (receiveMessage instanceof WeixinVoiceMessage) {
-            String recognition = ((WeixinVoiceMessage) receiveMessage).getRecognition();
-            if (StringUtils.isEmpty(recognition)) {
-                content = "没有听懂说什么呢? 不会是你的呻吟吧...";
-            } else {
-                content = handleTextMessage(content);
-            }
-        } else if (receiveMessage instanceof WeixinImageMessage) {
-            content = "这是...1024的图吗?";
-        } else if (receiveMessage instanceof WeixinLocationMessage) {
-            content = ((WeixinLocationMessage) receiveMessage).getLabel() + ": 这是我们的约会地址吗?";
-        } else if (receiveMessage instanceof WeixinVideoMessage) {
-            content = "视频什么的, 我最喜欢了";
-        } else if (receiveMessage instanceof WeixinLinkMessage) {
-            content = "文章已珍藏, 如果是1024的文章, 我会给你满分.";
-        } else if (receiveMessage instanceof WeixinEventMessage) {
-            String event = ((WeixinEventMessage) receiveMessage).getEvent();
-            if ("subscribe".equals(event)) {
-                WeixinUser wxUser = new WeixinUser(receiveMessage.getFromUserName());
-                addWxUser(wxUser);
-                int userCount = queryWxUserCount();
-                content = "你才来啊, 在你之前已经有" + userCount + "位同道关注我啦!";
-            } else if ("unsubscribe".equals(event)) {
-                WeixinUser wxUser = new WeixinUser(receiveMessage.getFromUserName());
-                deleteWxUser(wxUser);
-                return null;
-            } else {
-                return null;
-            }
-        } else {
-            content = "哎呀, 虽然不知道你给我发了什么, 但看起来很厉害的样子";
-        }
+        String content = messageHandlerRegistry.handle(receiveMessage);
         response.setContent(content);
 
         return response;
     }
 
-    public void addWxUser(WeixinUser wxUser) {
-        JSONObject queryUser = queryOne("select * from weixin_user where openId=?", wxUser.getOpenId());
-        if (queryUser == null) {
-            jdbcTemplate.update("insert into weixin_user(openId) values(?)", wxUser.getOpenId());
-            return;
-        }
-        WeixinUser oldUser = toJavaObj(queryUser, WeixinUser.class);
-        if (oldUser.getDeleted() == 1) {
-            jdbcTemplate.update("update weixin_user set deleted=0 where openId=?", wxUser.getOpenId());
-        }
-    }
-
-    public int queryWxUserCount() {
-        JSONObject countJson = queryOne("select count(*) as userCount from weixin_user where deleted=0");
-        if (countJson == null) return 0;
-        return countJson.getInteger("userCount");
-    }
-
-    public void deleteWxUser(WeixinUser wxUser) {
-        jdbcTemplate.update("update weixin_user set deleted=1 where openId=?", wxUser.getOpenId());
-    }
-
     public void syncWxUser() throws WeixinException {
         Set<String> openIds = requestOpenIds("");
         for (String openId : openIds) {
-            addWxUser(new WeixinUser(openId));
+            weixinUserService.addWxUser(new WeixinUser(openId));
         }
         log.info("add {} weixin users to db", openIds.size());
     }

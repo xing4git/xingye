@@ -212,49 +212,9 @@ public class ZhishuController {
                 log.error("parse time error", e);
             }
         }
-        fillRank(datas);
+        zhishuService.fillRank(datas);
 
         model.put("datas", datas);
         return new ModelAndView(viewName, model);
     }
-
-    private void fillRank(List<ZhishuData> datas) {
-        List<ZhishuData> copyDatas = Lists.newArrayList(datas);
-        Collections.sort(copyDatas, new Comparator<ZhishuData>() {
-            @Override
-            public int compare(ZhishuData o1, ZhishuData o2) {
-                double comp = o1.getPe() - o2.getPe();
-                if (comp > 0) return 1;
-                if (comp < 0) return -1;
-                return 0;
-            }
-        });
-        Map<Long, Integer> peRankMap = Maps.newHashMap();
-        int i = 1;
-        for (ZhishuData data : copyDatas) {
-            peRankMap.put(data.getId(), i++);
-        }
-
-        Collections.sort(copyDatas, new Comparator<ZhishuData>() {
-            @Override
-            public int compare(ZhishuData o1, ZhishuData o2) {
-                double comp = o1.getPb() - o2.getPb();
-                if (comp > 0) return 1;
-                if (comp < 0) return -1;
-                return 0;
-            }
-        });
-        Map<Long, Integer> pbRankMap = Maps.newHashMap();
-        i = 1;
-        for (ZhishuData data : copyDatas) {
-            pbRankMap.put(data.getId(), i++);
-        }
-
-        for (ZhishuData data : datas) {
-            data.setPeRank(peRankMap.get(data.getId()));
-            data.setPbRank(pbRankMap.get(data.getId()));
-        }
-    }
-
-
 }

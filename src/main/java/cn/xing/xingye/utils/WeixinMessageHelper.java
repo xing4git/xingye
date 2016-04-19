@@ -45,6 +45,7 @@ public class WeixinMessageHelper {
         if ("shortvideo".equals(msgType)) return WeixinVideoMessage.class;
         if ("location".equals(msgType)) return WeixinLocationMessage.class;
         if ("link".equals(msgType)) return WeixinLinkMessage.class;
+        if ("event".equals(msgType)) return WeixinEventMessage.class;
         return null;
     }
 

@@ -60,6 +60,7 @@ public class WeixinController {
         try {
             WeixinMessage receiveMessage = WeixinMessageHelper.readFromXML(content);
             WeixinMessage responseMessage = weixinService.response(receiveMessage);
+            if (responseMessage == null) return;
             String xml = WeixinMessageHelper.message2XML(responseMessage);
             xml = xml.trim();
             LOG.info("response weixin message: {}", xml);
@@ -69,6 +70,12 @@ public class WeixinController {
         } catch (Exception e) {
             LOG.error("response weixin message error", e);
         }
+    }
+
+    @ResponseBody
+    @RequestMapping("sync_weixin_user")
+    public void syncWeixinUser() throws WeixinException {
+         weixinService.syncWxUser();
     }
 
     @ResponseBody

@@ -48,3 +48,12 @@ CREATE TABLE `app_config` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_configName`(`configName`)
 ) ENGINE=InnoDB COMMENT='应用配置表';
+
+CREATE TABLE `weixin_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `openId` VARCHAR(128) NOT NULL DEFAULT '',
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:未删除, 1:已删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_openId`(`openId`)
+) ENGINE=InnoDB COMMENT='微信用户表';

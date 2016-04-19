@@ -58,10 +58,16 @@ public class WeixinController {
             return "";
         }
 
-        WeixinMessage message = WeixinMessageHelper.readFromXML(content);
-        WeixinMessage response = weixinService.response(message);
-        String xml = WeixinMessageHelper.message2XML(response);
-        return xml;
+        try {
+            WeixinMessage message = WeixinMessageHelper.readFromXML(content);
+            WeixinMessage response = weixinService.response(message);
+            String xml = WeixinMessageHelper.message2XML(response);
+            LOG.info("response weixin message: {}", xml);
+            return xml;
+        } catch (Exception e) {
+            LOG.error("response weixin message error", e);
+            return "";
+        }
     }
 
     @ResponseBody

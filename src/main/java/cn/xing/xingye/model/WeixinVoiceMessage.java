@@ -7,6 +7,10 @@ public class WeixinVoiceMessage extends WeixinMediaMessage {
     private String format;
     private String recognition;
 
+    public WeixinVoiceMessage() {
+        setMsgType("voice");
+    }
+
     public String getFormat() {
         return format;
     }

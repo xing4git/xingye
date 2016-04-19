@@ -6,11 +6,20 @@ package cn.xing.xingye.model;
 public class WeixinVideoMessage extends WeixinMediaMessage {
     private String thumbMediaId;
 
+    public WeixinVideoMessage() {
+        setMsgType("video");
+    }
+
     public String getThumbMediaId() {
         return thumbMediaId;
     }
 
     public void setThumbMediaId(String thumbMediaId) {
         this.thumbMediaId = thumbMediaId;
+    }
+
+    @Override
+    public String getMsgType() {
+        return "video";
     }
 }

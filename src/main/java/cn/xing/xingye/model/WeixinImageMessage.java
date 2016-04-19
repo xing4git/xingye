@@ -6,6 +6,10 @@ package cn.xing.xingye.model;
 public class WeixinImageMessage extends WeixinMediaMessage {
     private String picUrl;
 
+    public WeixinImageMessage() {
+        setMsgType("image");
+    }
+
     public String getPicUrl() {
         return picUrl;
     }
@@ -13,4 +17,5 @@ public class WeixinImageMessage extends WeixinMediaMessage {
     public void setPicUrl(String picUrl) {
         this.picUrl = picUrl;
     }
+
 }

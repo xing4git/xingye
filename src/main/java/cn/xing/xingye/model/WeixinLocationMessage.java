@@ -9,6 +9,10 @@ public class WeixinLocationMessage extends WeixinMessage {
     private Double scale;
     private String label;
 
+    public WeixinLocationMessage() {
+        setMsgType("location");
+    }
+
     public Double getLocationX() {
         return locationX;
     }
@@ -40,4 +44,5 @@ public class WeixinLocationMessage extends WeixinMessage {
     public void setLabel(String label) {
         this.label = label;
     }
+
 }

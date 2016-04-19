@@ -6,6 +6,10 @@ package cn.xing.xingye.model;
 public class WeixinTextMessage extends WeixinMessage {
     private String content;
 
+    public WeixinTextMessage() {
+        setMsgType("text");
+    }
+
     public String getContent() {
         return content;
     }
@@ -13,4 +17,6 @@ public class WeixinTextMessage extends WeixinMessage {
     public void setContent(String content) {
         this.content = content;
     }
+
+
 }

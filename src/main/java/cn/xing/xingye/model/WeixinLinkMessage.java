@@ -8,6 +8,10 @@ public class WeixinLinkMessage extends WeixinMessage {
     private String description;
     private String url;
 
+    public WeixinLinkMessage() {
+        setMsgType("link");
+    }
+
     public String getTitle() {
         return title;
     }
@@ -31,4 +35,5 @@ public class WeixinLinkMessage extends WeixinMessage {
     public void setUrl(String url) {
         this.url = url;
     }
+
 }

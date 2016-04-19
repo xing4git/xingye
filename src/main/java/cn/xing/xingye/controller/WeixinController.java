@@ -61,6 +61,7 @@ public class WeixinController {
             WeixinMessage receiveMessage = WeixinMessageHelper.readFromXML(content);
             WeixinMessage responseMessage = weixinService.response(receiveMessage);
             String xml = WeixinMessageHelper.message2XML(responseMessage);
+            xml = xml.trim();
             LOG.info("response weixin message: {}", xml);
             PrintWriter writer = response.getWriter();
             writer.write(xml);

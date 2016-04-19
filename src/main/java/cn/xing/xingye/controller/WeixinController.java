@@ -47,26 +47,26 @@ public class WeixinController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    @ResponseBody
-    public String receiveMsg(@RequestParam("signature") String signature,
+    public void receiveMsg(@RequestParam("signature") String signature,
                              @RequestParam("timestamp") String timestamp,
                              @RequestParam("nonce") String nonce,
-                             @RequestBody String content)
+                             @RequestBody String content, HttpServletResponse response)
             throws Exception {
         if (!weixinService.checkSignature(signature, timestamp, nonce)) {
             LOG.error("check weixin signature failed!");
-            return "";
+            return;
         }
 
         try {
-            WeixinMessage message = WeixinMessageHelper.readFromXML(content);
-            WeixinMessage response = weixinService.response(message);
-            String xml = WeixinMessageHelper.message2XML(response);
+            WeixinMessage receiveMessage = WeixinMessageHelper.readFromXML(content);
+            WeixinMessage responseMessage = weixinService.response(receiveMessage);
+            String xml = WeixinMessageHelper.message2XML(responseMessage);
             LOG.info("response weixin message: {}", xml);
-            return xml;
+            PrintWriter writer = response.getWriter();
+            writer.write(xml);
+            writer.flush();
         } catch (Exception e) {
             LOG.error("response weixin message error", e);
-            return "";
         }
     }
 

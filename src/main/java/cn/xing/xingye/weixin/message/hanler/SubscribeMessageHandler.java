@@ -4,6 +4,7 @@ import cn.xing.xingye.model.WeixinEventMessage;
 import cn.xing.xingye.model.WeixinMessage;
 import cn.xing.xingye.model.WeixinUser;
 import cn.xing.xingye.service.WeixinUserService;
+import cn.xing.xingye.utils.XingConst;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -25,6 +26,6 @@ public class SubscribeMessageHandler implements MessageHanlder {
         WeixinUser wxUser = new WeixinUser(receiveMessage.getFromUserName());
         weixinUserService.addWxUser(wxUser);
         int userCount = weixinUserService.queryWxUserCount();
-        return "你才来啊, 在你之前已经有" + userCount + "位同道关注我啦!";
+        return "你才来啊, 在你之前已经有" + userCount + "位同道关注我啦!" + XingConst.WEIXIN_GUIDE_CONTENT;
     }
 }

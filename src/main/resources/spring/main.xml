@@ -48,9 +48,11 @@
                 <bean class="cn.xing.xingye.weixin.message.hanler.LocationMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.SubscribeMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.RemoveSubscribeMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.BindUserMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.VideoMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.VoiceMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.ZhishuMessageHandler"/>
+                <bean class="cn.xing.xingye.weixin.message.hanler.ZhishuSyncMessageHandler"/>
                 <bean class="cn.xing.xingye.weixin.message.hanler.LastMessageHandler"/>
             </list>
         </property>

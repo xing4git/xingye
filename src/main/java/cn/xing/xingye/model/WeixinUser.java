@@ -5,6 +5,7 @@ package cn.xing.xingye.model;
  */
 public class WeixinUser extends BaseModel {
     private String openId;
+    private Long userId;
 
     public WeixinUser() {
     }
@@ -19,5 +20,13 @@ public class WeixinUser extends BaseModel {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

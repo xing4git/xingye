@@ -2,19 +2,20 @@ package cn.xing.xingye.service;
 
 import cn.xing.xingye.model.Zhishu;
 import cn.xing.xingye.model.ZhishuData;
+import cn.xing.xingye.utils.CommonUtils;
+import cn.xing.xingye.utils.SwsDownloadUtils;
+import cn.xing.xingye.utils.XingConst;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zhangxing on 15/12/21.
@@ -99,6 +100,61 @@ public class ZhishuService extends BaseService {
             data.setPeRank(peRankMap.get(data.getId()));
             data.setPbRank(pbRankMap.get(data.getId()));
         }
+    }
+
+    public void syncDataFromSws(long zhishuId) throws Exception {
+        Zhishu zhishu = queryZhishu(zhishuId);
+        if (zhishu == null) {
+            throw new Exception("该指数不存在");
+        }
+
+        String swsCode = zhishu.getSwsCode();
+        if (StringUtils.isEmpty(swsCode)) {
+            throw new Exception("该指数不存在对应的申万code");
+        }
+        String lastDate = queryLastData(zhishuId);
+        log.info("zhishu {} last date is {}", zhishu.getName(), lastDate);
+
+        List<ZhishuData> datas = SwsDownloadUtils.parse(swsCode, zhishuId);
+        log.info("sync from sws size: {}", datas.size());
+
+        int succLine = 0;
+        int errorLine = 0;
+        int expireLine = 0;
+        for (ZhishuData data : datas) {
+            if (lastDate != null && lastDate.compareTo(data.getDataDate()) >= 0) {
+                expireLine++;
+                continue;
+            }
+            if (!isValidData(data)) {
+                errorLine++;
+                continue;
+            }
+            addData(data);
+            succLine++;
+        }
+
+
+        log.info("插入成功行数: " + succLine + ", 插入失败行数: "
+                + errorLine + ", 过期行数: " + expireLine);
+    }
+
+    public boolean isValidData(ZhishuData data) {
+        long time = CommonUtils.zhishuDateToTimestamp(data.getDataDate());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        long now = System.currentTimeMillis();
+        if (now - time > 10L * 365 * 24 * 3600 * 1000) {
+            return false;
+        }
+
+        int week = calendar.get(Calendar.DAY_OF_WEEK);
+        if (week != Calendar.MONDAY) {
+            return false;
+        }
+
+        return true;
     }
 
 

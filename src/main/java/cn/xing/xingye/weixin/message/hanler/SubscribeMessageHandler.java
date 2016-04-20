@@ -5,7 +5,6 @@ import cn.xing.xingye.model.WeixinMessage;
 import cn.xing.xingye.model.WeixinUser;
 import cn.xing.xingye.service.WeixinUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by indexing on 16/4/19.

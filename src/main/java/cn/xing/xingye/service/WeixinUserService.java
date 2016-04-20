@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WeixinUserService extends BaseService {
+    public void bind(String openId, Long userId) {
+        jdbcTemplate.update("update weixin_user set userId=? where openId=?", userId, openId);
+    }
+
     public void addWxUser(WeixinUser wxUser) {
         JSONObject queryUser = queryOne("select * from weixin_user where openId=?", wxUser.getOpenId());
         if (queryUser == null) {
@@ -19,6 +23,12 @@ public class WeixinUserService extends BaseService {
         if (oldUser.getDeleted() == 1) {
             jdbcTemplate.update("update weixin_user set deleted=0 where openId=?", wxUser.getOpenId());
         }
+    }
+
+    public WeixinUser queryWxUser(String openId) {
+        JSONObject queryUser = queryOne("select * from weixin_user where openId=?", openId);
+        if (queryUser == null) return null;
+        return toJavaObj(queryUser, WeixinUser.class);
     }
 
     public int queryWxUserCount() {

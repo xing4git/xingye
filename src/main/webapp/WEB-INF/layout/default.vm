@@ -89,6 +89,8 @@
 <!-- react -->
 <script src="/static/lib/react/react.js"></script>
 <script src="/static/lib/react/react-dom.js"></script>
+<script src="http://qzonestyle.gtimg.cn/open/qcloud/video/h5/h5connect.js"
+        charset="utf-8" ></script>
 
 <script>
     $('#delete_modal').on('show.bs.modal', function (event) {

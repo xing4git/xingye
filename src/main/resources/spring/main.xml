@@ -8,7 +8,7 @@
 
     <!--声明使用注解-->
     <context:annotation-config/>
-    <context:component-scan base-package="cn.xing.xingye.service"/>
+    <context:component-scan base-package="cn.xing.xingye"/>
 
 
     <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -36,24 +36,24 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="configFactory" class="cn.xing.xingye.factory.ConfigFactory"/>
-    <bean id="weixinConfig" class="cn.xing.xingye.model.WeixinConfig"
+    <bean id="configFactory" class="cn.xing.xingye.touzi.factory.ConfigFactory"/>
+    <bean id="weixinConfig" class="cn.xing.xingye.touzi.model.WeixinConfig"
           factory-bean="configFactory" factory-method="newWeixinConfig"/>
 
-    <bean id="messageHandlerRegistry" class="cn.xing.xingye.weixin.message.hanler.MessageHandlerRegistry">
+    <bean id="messageHandlerRegistry" class="cn.xing.xingye.touzi.hanler.MessageHandlerRegistry">
         <property name="messageHanlders">
             <list>
-                <bean class="cn.xing.xingye.weixin.message.hanler.ImageMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.LinkMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.LocationMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.SubscribeMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.RemoveSubscribeMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.BindUserMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.VideoMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.VoiceMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.ZhishuMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.ZhishuSyncMessageHandler"/>
-                <bean class="cn.xing.xingye.weixin.message.hanler.LastMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.ImageMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.LinkMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.LocationMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.SubscribeMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.RemoveSubscribeMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.BindUserMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.VideoMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.VoiceMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.ZhishuMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.ZhishuSyncMessageHandler"/>
+                <bean class="cn.xing.xingye.touzi.hanler.LastMessageHandler"/>
             </list>
         </property>
     </bean>

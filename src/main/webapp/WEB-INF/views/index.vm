@@ -1,7 +1,21 @@
 #set($page_title="星夜")
+#set($user_scripts = ["/static/js/video.js"])
 
 <!-- Main component for a primary marketing message or call to action -->
 <div class="jumbotron">
     <h3>Hello,</h3>
     <p>欢迎来到@zhangxing 的私人乐园: 星夜</p>
 </div>
+
+<div id="id_video_container" style="width:100%;height:320px;"></div><script src="http://qzonestyle.gtimg.cn/open/qcloud/video/h5/h5connect.js"></script>
+<script type="text/javascript">
+    (function(){
+        var option ={"auto_play":"0","file_id":"14651978969258931100","app_id":"1252102344","width":568,"height":320};
+        /*调用播放器进行播放*/
+        new qcVideo.Player(
+                /*代码中的id_video_container将会作为播放器放置的容器使用,可自行替换*/
+                "id_video_container",
+                option
+        );
+    })()
+</script>

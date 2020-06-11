@@ -1,0 +1,99 @@
+#parse("/WEB-INF/views/invest/tab.vm")
+
+#if($simulates)
+<div>
+    <h3>定投模拟结果</h3>
+</div>
+
+<div>
+    <table class="table table-bordered table-hover">
+        <tr class="success">
+            #foreach($th in ["月份", "当月点位", "当月投入", "累计投入", "累计净值", "盈利", "盈利幅度"])
+                <th>$th</th>
+            #end
+        </tr>
+        #foreach($simulate in $simulates)
+            <tr>
+                <td>第${simulate.month}月</td>
+                <td>$simulate.value</td>
+                <td>$simulate.touru</td>
+                <td>$simulate.totalTouru</td>
+                <td>$simulate.jingzhi</td>
+                <td>$simulate.yingli</td>
+                <td>${simulate.yingliFudu}%</td>
+            </tr>
+        #end
+    </table>
+</div>
+#end
+
+<div>
+    <h3>定投模拟参数</h3>
+</div>
+
+<div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">当前点位: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="currentValue" value="$!params.currentValue">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">最大点位: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="maxValue" value="$!params.maxValue">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">最低点位: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="minValue" value="$!params.minValue">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">定投点位: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="dtValue" value="$!params.dtValue">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">下降月份: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="downMonth" value="$!params.downMonth">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">上升月份: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="upMonth" value="$!params.upMonth">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">定投金额增长指数: </label>
+
+            <div class="col-sm-2">
+                <input type="text" class="form-control"
+                       name="index" value="$!params.index">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-default">提交</button>
+            </div>
+        </div>
+    </form>
+</div>

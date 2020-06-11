@@ -6,8 +6,8 @@
         <li #if($link.requestPath.startsWith("/invest/dingtou")) class="active" #end>
             <a href="/invest/dingtou">定投</a>
         </li>
-        <li #if($link.requestPath.startsWith("/invest/record")) class="active" #end>
-            <a href="/invest/record">实盘记录</a>
+        <li #if($link.requestPath.startsWith("/invest/dtSimulate")) class="active" #end>
+            <a href="/invest/dtSimulate">定投模拟</a>
         </li>
     </ul>
 </div>

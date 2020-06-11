@@ -1,6 +1,6 @@
 <configuration>
 
-    <property name="filename" value="/data/logs/xingye/xingye"/>
+    <property name="filename" value="~/logs/xingye/xingye"/>
     <property name="pattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n"/>
 
     <appender name="R" class="ch.qos.logback.core.rolling.RollingFileAppender">
